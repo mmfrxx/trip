@@ -1,6 +1,7 @@
 package org.architecturemining.trip.trip.service;
 
 import org.architecturemining.trip.trip.TripApplication;
+import org.architecturemining.trip.trip.model.ProductType;
 import org.architecturemining.trip.trip.worker.TripWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +18,14 @@ public class InputController {
     @Autowired
     private TripApplication.Communicator communicator;
 
-    @GetMapping("/trip/{client}")
-    public boolean createTrip(@PathVariable("client") String client) {
+    @GetMapping("/trip/{client}/{product}/{enough-credit}")
+    public boolean createTrip(@PathVariable("client") String client,
+                              @PathVariable("product")String type,
+                              @PathVariable(value = "enough-credit", required = false) Boolean isEnoughCredit) {
         if (TripWorkerCatalog.getInstance().hasWorkerFor(client)) {
             return false;
         } else {
-            TripWorker worker = new TripWorker(client, communicator);
+            TripWorker worker = new TripWorker(client,type, isEnoughCredit, communicator);
             TripWorkerCatalog.getInstance().add(worker);
 
             Thread thread = new Thread(worker);

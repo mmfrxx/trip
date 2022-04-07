@@ -8,12 +8,26 @@ public abstract class AbstractWorker implements Runnable {
     private static int MAXSERVICETIME = 50;
     private static int MINSERVICETIME = 10;
     private String client;
+    private String type;
+    private Boolean enoughCredit;
 
-    public AbstractWorker(String client, TripApplication.Communicator communicator) {
+    public AbstractWorker(String client, String type, Boolean enoughCredit, TripApplication.Communicator communicator) {
         this.client = client;
+        this.type = type;
+        this.enoughCredit = enoughCredit;
         this.communicator = communicator;
-    }	public String getClient() {
+    }
+
+    public String getClient() {
         return client;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Boolean getEnoughCredit() {
+        return enoughCredit;
     }
 
     public TripApplication.Communicator getCommunicator() {
