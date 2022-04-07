@@ -1,2 +1,6 @@
-package org.architecturemining.trip.trip.model;public enum ProductType {
+package org.architecturemining.trip.trip.model;
+
+public enum ProductType {
+    TICKET,
+    SUBSCRIPTION
 }
