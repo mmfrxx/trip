@@ -30,7 +30,6 @@ public class TripApplication {
 	}
 
 	public class Communicator {
-
 		@Autowired
 		private InputController inputController;
 
