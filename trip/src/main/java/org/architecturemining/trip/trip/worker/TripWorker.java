@@ -17,6 +17,9 @@ public class TripWorker extends AbstractWorker{
         if ("anon".equals(getType())) {
             Boolean processed = handleAnonymousCheckIn();
         }
+        if("subscription".equals(getType()) || "ticket".equals(getType())){
+            handleProductPurchase();
+        }
         TripWorkerCatalog.getInstance().remove(this);
     }
 
@@ -24,5 +27,19 @@ public class TripWorker extends AbstractWorker{
         logger.info("Client " + getClient() + " is trying to check-in with anonymous ticket.");
         Boolean processed = getCommunicator().getOutputController().checkInWithAnonTicket(getClient());
         return processed;
+    }
+
+    private Boolean handleProductPurchase(){
+        logger.info("Start processing " + getType() + "purchase request for client: " + getType());
+        Boolean processed = getCommunicator().getOutputController().getProductsList(getType(), getClient());
+
+        if (!processed) {
+            logger.error("Could not get products list for client " + getClient());
+            return false;
+        }
+        logger.info("Client " + getClient() + " selects product and wants to proceed further to payment.");
+        processed = getCommunicator().getOutputController().payForProduct(getType(), getClient());
+
+        return true;
     }
 }
