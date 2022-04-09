@@ -21,7 +21,25 @@ public class TripWorker extends AbstractWorker{
         if("subscription".equals(getType()) || "ticket".equals(getType())){
             handleProductPurchase();
         }
+        if("check-in".equals((getType()))) {
+            handleCheckIn();
+        }
+        if("check-out".equals((getType()))) {
+            handleCheckOut();
+        }
         TripWorkerCatalog.getInstance().remove(this);
+    }
+
+    private Boolean handleCheckIn(){
+        logger.info("Client " + getClient() + " wants to check in with personal account/card.");
+        Boolean processed = getCommunicator().getOutputController().checkIn(getClient(), getEnoughCredit());
+        return processed;
+    }
+
+    private Boolean handleCheckOut(){
+        logger.info("Client " + getClient() + " wants to check out with personal account/card.");
+        Boolean processed = getCommunicator().getOutputController().checkOut(getClient());
+        return processed;
     }
 
     private Boolean handleAnonymousCheckIn(){

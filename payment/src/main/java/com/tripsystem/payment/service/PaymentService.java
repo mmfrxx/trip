@@ -43,10 +43,28 @@ public class PaymentService {
         } else {
             logger.error("Please run user-service!!!!");
         }
-        logger.info("Sending ");
+        logger.info("Sending receipt back to customer.");
         return client;
     }
 
+    @RequestMapping("/top-up/{client}")
+    public String topUp(@PathVariable("client") String client) {
+        logger.info("Initializing transaction for client " + client + " to top up the account balance");
+        if(isUserServiceAvailable()){
+            logger.info("Updating passenger's account, sent request to user-service");
+            String response = restTemplate.getForObject(
+                    "http://user-service/update/" + client + "/subscription", String.class);
+        } else {
+            logger.error("Please run user-service!!!!");
+        }
+        return client;
+    }
+
+    @RequestMapping("/transfer/{client}")
+    public String transfer(@PathVariable("client") String client) {
+        logger.info("Transferring money for a ride to tycoon for client " + client);
+        return client;
+    }
     private Boolean isTransactionSuccessful(){
         Random rand = new Random();
         return rand.nextBoolean();

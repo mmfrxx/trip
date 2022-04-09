@@ -18,7 +18,18 @@ public class UserService {
         } else {
             logger.info("Updating client " + client + "'s balance");
         }
-        logger.info("Sending receipt to user.");
+        return client;
+    }
+
+    @RequestMapping("/check-in/{client}")
+    public String checkIn(@PathVariable("client") String client) {
+        logger.info("Received check-in request from client" + client + ". Updating account information.");
+        return client;
+    }
+
+    @RequestMapping("/check-out/{client}")
+    public String checkOut(@PathVariable("client") String client) {
+        logger.info("Received check-out request from client" + client + ". Updating account information.");
         return client;
     }
 }

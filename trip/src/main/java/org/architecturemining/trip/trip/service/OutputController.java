@@ -49,6 +49,26 @@ public class OutputController {
         return true;
     }
 
+    public Boolean checkIn(String client, Boolean hasEnoughCredit) {
+        if (isCheckServiceAvailable()) {
+            logger.info(String.format("Received check-in request with personal account/card from client: %s. I will pass the request to our check-in/out management system.", client));
+            String response = restTemplate.getForObject("http://check-service/check-in/" + client + "/" + hasEnoughCredit, String.class);
+        } else {
+            logger.error("Please run check-service!!!");
+        }
+        return true;
+    }
+
+    public Boolean checkOut(String client) {
+        if (isCheckServiceAvailable()) {
+            logger.info(String.format("Received check-out request from client: %s. I will pass the request to our check-in/out management system.", client));
+            String response = restTemplate.getForObject("http://check-service/check-out/" + client, String.class);
+        } else {
+            logger.error("Please run check-service!!!");
+        }
+        return true;
+    }
+
     public Boolean getProductsList(String productType, String client) {
         if (isProductServiceAvailable()) {
             logger.info(String.format("I will pass %s purchase request to our product management for client: %s", productType, client));
