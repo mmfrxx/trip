@@ -35,11 +35,14 @@ public class OutputController {
         return isServiceAvailable("payment-service");
     }
 
+    public boolean isTycoonServiceAvailable() {
+        return isServiceAvailable("tycoon-service");
+    }
+
     public Boolean checkInWithAnonTicket(String client) {
         if (isCheckServiceAvailable()) {
             logger.info(String.format("Received check-in request with anonymous ticket from client: %s. I will pass the request to our check-in/out management system.", client));
             String response = restTemplate.getForObject("http://check-service/anonymous/check-in/" + client, String.class);
-            // flag ticket as used in user-service
         } else {
             logger.error("Please run check-service!!!");
         }
@@ -66,6 +69,24 @@ public class OutputController {
         } else {
             logger.error("Please run payment-service!!!");
             return false;
+        }
+        return true;
+    }
+
+    public Boolean removeTycoon(String tycoon, String client) {
+        if (isTycoonServiceAvailable()) {
+            String response = restTemplate.getForObject("http://tycoon-service/remove/" + client + "/" + tycoon, String.class);
+        } else {
+            logger.error("Please run tycoon-service!!!");
+        }
+        return true;
+    }
+
+    public Boolean addTycoon(String tycoon, String client) {
+        if (isTycoonServiceAvailable()) {
+            String response = restTemplate.getForObject("http://tycoon-service/add/" + client + "/" + tycoon, String.class);
+        } else {
+            logger.error("Please run tycoon-service!!!");
         }
         return true;
     }

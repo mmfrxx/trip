@@ -2,6 +2,7 @@ package org.architecturemining.trip.trip.service;
 
 import org.architecturemining.trip.trip.TripApplication;
 import org.architecturemining.trip.trip.model.ProductType;
+import org.architecturemining.trip.trip.worker.AdminWorker;
 import org.architecturemining.trip.trip.worker.TripWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,22 @@ public class InputController {
             return false;
         } else {
             TripWorker worker = new TripWorker(client,type, isEnoughCredit, communicator);
+            TripWorkerCatalog.getInstance().add(worker);
+
+            Thread thread = new Thread(worker);
+            thread.start();
+            return true;
+        }
+    }
+
+    @GetMapping("/internal/update-tycoons/{client}/{tycoon}/{toAdd}")
+    public boolean updateTycoons(@PathVariable("client") String client,
+                                 @PathVariable("tycoon") String tycoon,
+                                 @PathVariable("toAdd") Boolean toAdd) {
+        if (TripWorkerCatalog.getInstance().hasWorkerFor(client)) {
+            return false;
+        } else {
+            AdminWorker worker = new AdminWorker(client, tycoon, toAdd, communicator);
             TripWorkerCatalog.getInstance().add(worker);
 
             Thread thread = new Thread(worker);

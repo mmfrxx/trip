@@ -1,6 +1,6 @@
 package org.architecturemining.trip.trip.service;
 
-import org.architecturemining.trip.trip.worker.TripWorker;
+import org.architecturemining.trip.trip.worker.AbstractWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,25 +11,25 @@ public class TripWorkerCatalog {
     private Logger logger = LoggerFactory.getLogger(TripWorkerCatalog.class);
 
 
-    private Map<String, TripWorker> clients = new HashMap<>();
+    private Map<String, AbstractWorker> clients = new HashMap<>();
 
     public boolean hasWorkerFor(String client) {
         return clients.containsKey(client);
     }
 
-    public TripWorker get(String client) {
+    public AbstractWorker get(String client) {
         if (hasWorkerFor(client)) {
             return clients.get(client);
         }
         return null;
     }
 
-    public void add(TripWorker worker) {
+    public void add(AbstractWorker worker) {
         clients.put(worker.getClient(), worker);
         logger.info("Add worker for: " + worker.getClient() + ". Total workers in catalog: " + clients.size());
     }
 
-    public void remove(TripWorker worker) {
+    public void remove(AbstractWorker worker) {
         clients.remove(worker.getClient());
         logger.info("Remove worker for: " + worker.getClient() + ". Total workers in catalog: " + clients.size());
     }
