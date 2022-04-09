@@ -12,6 +12,7 @@ public class TripWorker extends AbstractWorker{
         super(client, type, enoughCredit, communicator);
 
     }
+
     @Override
     public void run() {
         if ("anon".equals(getType())) {
